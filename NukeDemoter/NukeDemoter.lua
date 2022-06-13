@@ -1,5 +1,5 @@
 _addon.author = 'RolandJ'
-_addon.version = '1.0.0'
+_addon.version = '1.0.1'
 _addon.commands = {'nukedemoter', 'ndemoter', 'demoter', 'nd'}
 
 -- Local libraries used throughout addon
@@ -36,7 +36,7 @@ windower.register_event('outgoing chunk', function(id, data, modified, injected,
 			if spell_recasts[spell.id] > 0 then
 			
 				-- Get Kind Array & Index
-				local kind_array = demoter_arrays.kind_arrays[spell.english:split(' ')[1] .. (mixed and 'Mixed' or '')]
+				local kind_array = demoter_arrays.kind_arrays[spell.english:split(' ')[1]]
 				local kind_index = table.find(kind_array and kind_array or {}, spell.english) --error handling
 				
 				-- Return Out if No Kind Array (These are spell kinds we are not demoting)
@@ -56,14 +56,18 @@ windower.register_event('outgoing chunk', function(id, data, modified, injected,
 							['english'] = kind_array[i],
 						}
 						
-						if player_spells[new_spell.id] then --does the player know the spell? 
-							if spell_recasts[new_spell.id] == 0 then --is the spell ready to be cast?
-								logger(false, 8, 'Demoted "' .. spell.english .. '" to "' .. new_spell.english .. '"...')
-								parsed.Param = new_spell.id -- CREDIT: Masunasu (FFXIAH)
-								return packets.build(parsed) -- CREDIT: Masunasu (FFXIAH)
+						if mixed or (not mixed and new_spell.english:sub(-2) ~= 'ja') then --filter out the -ja's appropriately
+							if player_spells[new_spell.id] then --does the player know the spell? 
+								if spell_recasts[new_spell.id] == 0 then --is the spell ready to be cast?
+									logger(false, 8, 'Demoted "' .. spell.english .. '" to "' .. new_spell.english .. '"...')
+									parsed.Param = new_spell.id -- CREDIT: Masunasu (FFXIAH)
+									return packets.build(parsed) -- CREDIT: Masunasu (FFXIAH)
+								end
+							else
+								logger(false, 8, 'Player does not know "' .. new_spell.english .. '".')
 							end
 						else
-							logger(false, 8, 'Player does not know "' .. new_spell.english .. '".')
+							logger(false, 8, 'Mixed is off, filtering "' .. new_spell.english .. '" out of the demotion process...')
 						end
 					end
 				else
@@ -95,7 +99,7 @@ windower.register_event('addon command', function(...)
 	elseif table.contains({'mixed', 'mix', 'aoe'}, cmd[1]:lower()) then
 		mixed = not mixed
 		logger(true, mixed and green or red, 'T6 Demotion to Nuke-ja ' .. (mixed and 'Activated' or 'Deactivated'))
-		if mixed then logger(true, red, 'WARNING: Only use this mode when it is A) safe to AoE and B) recast mitigation is needed.') end
+		if mixed then logger(true, red, 'WARNING: Only use this mode when it is safe to AoE.') end
 	elseif table.contains({'debug', 'debugmode'}, cmd[1]:lower()) then
 		debugMode = not debugMode
 		logger(true, grey, 'Debug Mode ' .. (active and 'activated' or 'deactivated') .. '...')
