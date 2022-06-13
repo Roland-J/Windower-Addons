@@ -41,7 +41,8 @@ windower.register_event('outgoing chunk', function(id, data, modified, injected,
 				
 				-- Return Out if No Kind Array (These are spell kinds we are not demoting)
 				if kind_index == nil then
-					return logger(false, 8, 'The spell "' .. spell.english .. '" is awaiting recast but not demotable...')
+					logger(false, 8, 'The spell "' .. spell.english .. '" is awaiting recast but not demotable...')
+					return
 				end
 				
 				-- Demote Until a Plyaer-Ready-to-Cast Tier is Found
@@ -55,8 +56,8 @@ windower.register_event('outgoing chunk', function(id, data, modified, injected,
 							['english'] = kind_array[i],
 						}
 						
-						if player_spells[new_spell.id] then
-							if spell_recasts[new_spell.id] == 0 then
+						if player_spells[new_spell.id] then --does the player know the spell? 
+							if spell_recasts[new_spell.id] == 0 then --is the spell ready to be cast?
 								logger(false, 8, 'Demoted "' .. spell.english .. '" to "' .. new_spell.english .. '"...')
 								parsed.Param = new_spell.id -- CREDIT: Masunasu (FFXIAH)
 								return packets.build(parsed) -- CREDIT: Masunasu (FFXIAH)
@@ -66,7 +67,7 @@ windower.register_event('outgoing chunk', function(id, data, modified, injected,
 						end
 					end
 				else
-					return logger(false, 8, 'Cannot demote "' .. spell.english .. '" further...')
+					logger(false, 8, 'Cannot demote "' .. spell.english .. '" further...')
 				end
 			end
 		end
