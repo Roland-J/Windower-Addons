@@ -7,12 +7,12 @@ A utility that allows the player, or their alt(s), to specifically engage or dis
 
 
 Engage commands:
-	//engage [commands]
-		"on"                   - Engages the player to their target.
-		"on send [recipient]"  - Engages recipient to current player\'s target.
-		"off"                  - Disengages the player from their target.
-		"off send [recipient]" - Disengages recipient from their target.
-		"help"                 - Displays this help text.
-	 
-	 NOTE: The [recipient] can be "@all", "@others", or an alt\'s name.
-	 SHORTHAND: Try the "//engage", "//engage s [recipient]", "//disengage", and "//disengage s [recipient]" shorthand commands!
+	- //engage [commands]
+	-	"on"                   - Engages the player to their target.
+	-	"on send [recipient]"  - Engages recipient to current player\'s target.
+	-	"off"                  - Disengages the player from their target.
+	-	"off send [recipient]" - Disengages recipient from their target.
+	-	"help"                 - Displays this help text.
+
+- NOTE: The [recipient] can be "@all", "@others", or an alt\'s name.
+- SHORTHAND: Try the "//engage", "//engage s [recipient]", "//disengage", and "//disengage s [recipient]" shorthand commands!
